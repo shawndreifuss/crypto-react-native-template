@@ -23,8 +23,6 @@ enum SignInType {
   Apple,
 }
 
-
-
 const Login = () => {
   const [countryCode, setCountryCode] = useState("+1");
   const [phoneNumber, setPhoneNumber] = useState("");

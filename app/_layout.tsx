@@ -152,7 +152,7 @@ const Initialayout = () => {
       />
 
 <Stack.Screen name="(authenticated)/(tabs)" options={{ headerShown: false }} />
-{/* 
+
       <Stack.Screen
         name="(authenticated)/crypto/[id]"
         options={{
@@ -193,7 +193,7 @@ const Initialayout = () => {
             </TouchableOpacity>
           ),
         }}
-      /> */}
+      />
     </Stack>
   );
 }

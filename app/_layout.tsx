@@ -1,61 +1,52 @@
-import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
-import { Stack,  useRouter } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import "react-native-reanimated";
-import Colors from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, Text, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Link, useSegments } from "expo-router";
+import React from 'react';
+import Colors from '@/constants/Colors';
+import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import { Ionicons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useFonts } from 'expo-font';
+import { Link, Stack, useRouter, useSegments } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import { TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 import * as SecureStore from 'expo-secure-store';
-import { ClerkProvider, useAuth } from "@clerk/clerk-expo"
-const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { UserInactivityProvider } from '@/context/UserInactivity';
+const queryClient = new QueryClient();
 
+// Cache the Clerk JWT
 const tokenCache = {
   async getToken(key: string) {
     try {
-      const item = await SecureStore.getItemAsync(key);
-      if (item) {
-        console.log(`${key} was used 🔐 \n`);
-      } else {
-        console.log("No values stored under key: " + key);
-      }
-      return item;
-    } catch (error) {
-      console.error("SecureStore get item error: ", error);
-      await SecureStore.deleteItemAsync(key);
+      return SecureStore.getItemAsync(key);
+    } catch (err) {
       return null;
     }
   },
   async saveToken(key: string, value: string) {
     try {
-      await SecureStore.setItemAsync(key, value);
-      console.log(`${key} saved with value: ${value}`);
+      return SecureStore.setItemAsync(key, value);
     } catch (err) {
-      console.error("SecureStore set item error: ", err);
+      return;
     }
   },
 };
 
-
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from "expo-router";
+} from 'expo-router';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const Initialayout = () => {
+const InitialLayout = () => {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
-
   const router = useRouter();
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
@@ -69,73 +60,70 @@ const Initialayout = () => {
     if (loaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]); 
+  }, [loaded]);
 
   useEffect(() => {
-    console.log('isSignedIn', isSignedIn);
     if (!isLoaded) return;
-    const inAuthGroup = segments[0] === 'authenticated'
 
-    if (isSignedIn && ! inAuthGroup) {
+    const inAuthGroup = segments[0] === '(authenticated)';
+
+    if (isSignedIn && !inAuthGroup) {
       router.replace('/(authenticated)/(tabs)/home');
     } else if (!isSignedIn) {
-      router.replace('/')
+      router.replace('/');
     }
-}, [isSignedIn]);
+  }, [isSignedIn]);
 
   if (!loaded || !isLoaded) {
-    return <Text>...loafinh</Text>  
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
   }
 
   return (
     <Stack>
-      {/*  SignUp Screen */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
         name="signup"
         options={{
-          title: "",
-          headerBackTitle: "",
+          title: '',
+          headerBackTitle: '',
           headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: Colors.background,
-          },
+          headerStyle: { backgroundColor: Colors.background },
           headerLeft: () => (
             <TouchableOpacity onPress={router.back}>
-              <Ionicons name="arrow-back" size={24} color={Colors.dark} />
+              <Ionicons name="arrow-back" size={34} color={Colors.dark} />
             </TouchableOpacity>
           ),
         }}
       />
-      {/*  Login Screen */}
-       <Stack.Screen
+
+      <Stack.Screen
         name="login"
         options={{
-          title: "",
-          headerBackTitle: "",
+          title: '',
+          headerBackTitle: '',
           headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: Colors.background,
-          },
+          headerStyle: { backgroundColor: Colors.background },
           headerLeft: () => (
             <TouchableOpacity onPress={router.back}>
               <Ionicons name="arrow-back" size={34} color={Colors.dark} />
             </TouchableOpacity>
           ),
           headerRight: () => (
-            <Link href={'/help'} asChild >
-            <TouchableOpacity onPress={router.back}>
-              <Ionicons name="help-circle-outline" size={34} color={Colors.dark} />
-            </TouchableOpacity>
+            <Link href={'/help'} asChild>
+              <TouchableOpacity>
+                <Ionicons name="help-circle-outline" size={34} color={Colors.dark} />
+              </TouchableOpacity>
             </Link>
           ),
         }}
       />
 
-      {/*  Help Screen */}
       <Stack.Screen name="help" options={{ title: 'Help', presentation: 'modal' }} />
 
-      {/* Verify Phone Screen */}
       <Stack.Screen
         name="verify/[phone]"
         options={{
@@ -150,9 +138,7 @@ const Initialayout = () => {
           ),
         }}
       />
-
-<Stack.Screen name="(authenticated)/(tabs)" options={{ headerShown: false }} />
-
+      <Stack.Screen name="(authenticated)/(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
         name="(authenticated)/crypto/[id]"
         options={{
@@ -196,15 +182,19 @@ const Initialayout = () => {
       />
     </Stack>
   );
-}
+};
 
 const RootLayoutNav = () => {
   return (
- <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey!}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style="light" />
-        <Initialayout />
-      </GestureHandlerRootView>
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+      <QueryClientProvider client={queryClient}>
+        <UserInactivityProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <StatusBar style="light" />
+            <InitialLayout />
+          </GestureHandlerRootView>
+        </UserInactivityProvider>
+      </QueryClientProvider>
     </ClerkProvider>
   );
 };

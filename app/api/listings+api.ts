@@ -2,6 +2,17 @@ import { ExpoRequest, ExpoResponse } from 'expo-router/server';
 
 const API_KEY = process.env.CRYPTO_API_KEY;
 
+type ExpoRequest = {
+  expoUrl: {
+    searchParams: {
+      get: (name: string) => string | null;
+    };
+  };
+};
+
+type ExpoResponse = {
+  json: (data: any) => Response;
+};
 export async function GET(request: ExpoRequest) {
   // const limit = request.expoUrl.searchParams.get('limit') || 5;
 

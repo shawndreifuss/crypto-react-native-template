@@ -1,13 +1,9 @@
-
-
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons, EvilIcons, Entypo, FontAwesome } from '@expo/vector-icons';
-import { useAssets } from 'expo-asset';
 
-const Invest = () => {
-  const [assets] = useAssets([require('@/assets/images/top-20-cryptos.jpg'), require('@/assets/images/download.jpg')]);
-
+const Dashboard = () => {
   const itemList = [
     {
       icon: 'bitcoin',
@@ -97,49 +93,40 @@ const Invest = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={assets ? { uri: assets[0].localUri } : null}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-        borderRadius={25}
-      >
-        <View style={styles.boxContent}>
-          <View style={styles.boxContentTitle}>
-            <View style={styles.walletIconContent}>
-              <Ionicons
-                name="wallet"
-                size={19}
-                color="#FFFFFF" // White
-                style={styles.walletIconStyle}
-              />
-            </View>
-            <Text style={styles.contentTextTotalWallet}> Total Wallet Balance </Text>
-            <View style={styles.boxContentRight}>
-              <Text style={styles.textUSD}>USD</Text>
-              <EvilIcons
-                name="chevron-down"
-                size={30}
-                style={styles.chevronDownIcon}
-                color="#9E9E9E" // Grey
-              />
-            </View>
+    <View style={styles.content}>
+      <View style={styles.boxContent}>
+        <View style={styles.boxContentTitle}>
+          <View style={styles.walletIconContent}>
+            <Ionicons
+              name="wallet"
+              size={19}
+              color="#FFFFFF" // White
+              style={styles.walletIconStyle}
+            />
           </View>
-          <ImageBackground borderRadius={25} style={{position: 'absolute', marginLeft: 10 }} source={assets ? { uri: assets[1].localUri } : null}>
-          <View style={styles.boxContentPrice}>
-           
+          <Text style={styles.contentTextTotalWallet}> Total Wallet Balance </Text>
+          <View style={styles.boxContentRight}>
+            <Text style={styles.textUSD}>USD</Text>
+            <EvilIcons
+              name="chevron-down"
+              size={30}
+              style={styles.chevronDownIcon}
+              color="#9E9E9E" // Grey
+            />
           </View>
-          </ImageBackground>
-          <Text style={styles.boxContentPriceBTC}>  </Text>
-          <Ionicons
-            name="add"
-            size={30}
-            style={styles.chevronThisDownIconStyle}
-            color="#9E9E9E" // Grey
-          />
         </View>
-      </ImageBackground>
-
+        <View style={styles.boxContentPrice}>
+          <Text style={styles.contentPriceOne}> $39.584 </Text>
+          <Text style={styles.contentPriceSecond}> +3.55% </Text>
+        </View>
+        <Text style={styles.boxContentPriceBTC}> 7.251332 BTC </Text>
+        <Entypo
+          name="chevron-thin-down"
+          size={30}
+          style={styles.chevronThisDownIconStyle}
+          color="#9E9E9E" // Grey
+        />
+      </View>
       <View style={styles.itemTitleContent}>
         <Text style={styles.itemTitleShortByHigher}> Sorted by higher % </Text>
         <View style={styles.itemTitleContentHour}>
@@ -161,22 +148,17 @@ const Invest = () => {
   );
 };
 
-export default Invest;
+export default Dashboard;
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flex: 1,
   },
-  backgroundImage: {
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    position: 'absolute',
-    marginVertical: 20,
-    marginHorizontal: 15,
-    height: 200,
-    width:400,
-  },
   boxContent: {
+    marginVertical: 20,
+    marginHorizontal: 20,
+    borderRadius: 25,
+    backgroundColor: '#FFFFFF', // White
     elevation: 5,
   },
   boxContentTitle: {
@@ -217,10 +199,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginTop: 10,
-    backgroundColor:'transparent',
-    width: 250,
-    height: 150,
-    borderRadius: 25,
   },
   contentPriceOne: {
     fontSize: 30,
@@ -251,7 +229,6 @@ const styles = StyleSheet.create({
   itemTitleContent: {
     justifyContent: 'space-between',
     marginHorizontal: 20,
-    marginTop: 280,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -274,7 +251,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     height: 80,
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    backgroundColor: '#FFFFFF', // White
     elevation: 5,
     borderRadius: 15,
   },

@@ -5,6 +5,7 @@ import { FontAwesome } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { BlurView } from 'expo-blur'
 import CustomHeader from '@/components/CustomHeader'
+import Header from '@/components/Header'
 
 const Layout = () => {
   return (
@@ -33,7 +34,7 @@ const Layout = () => {
         tabBarIcon: ({size,color}) => (
           <FontAwesome name='home' size={size} color={color} />
         ),
-        header: () => <CustomHeader />
+        header: () => <Header />
       }} />
       {/* Invest Tab */}
        <Tabs.Screen name='invest' options={{
@@ -56,7 +57,8 @@ const Layout = () => {
         title: 'Crypto',
         tabBarIcon: ({size,color}) => (
           <FontAwesome name='bitcoin' size={size} color={color} />
-        )
+        ),
+        header: () => <CustomHeader />
       }} />
       {/* Lifestyle Tab */}
       <Tabs.Screen name='lifestyle' options={{
@@ -64,6 +66,7 @@ const Layout = () => {
         tabBarIcon: ({size,color}) => (
           <FontAwesome name='th' size={size} color={color} />
         ),
+        header: () => <CustomHeader />
       }} />
     </Tabs>
   )

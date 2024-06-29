@@ -50,7 +50,7 @@ const Home = () => {
       </View>
       <View style={{flex: 1}}>
               <Text style={{ fontWeight: '500'}}>{transaction.title}</Text>
-              <Text style={{ color: Colors.gray, fontSize: 12}}>{transaction.date.toLocaleDateString()}</Text>
+              <Text style={{ color: Colors.gray, fontSize: 12}}>{transaction.date.toLocaleString()}</Text>
           </View>
           <Text>${transaction.amount}</Text>
       </View>

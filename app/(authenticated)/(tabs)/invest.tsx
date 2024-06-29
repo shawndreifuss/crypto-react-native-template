@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import {
-StyleSheet,
-View,
-Dimensions,
-ActivityIndicator,
-ScrollView,
-Animated,
+  StyleSheet,
+  View,
+  Dimensions,
+  ActivityIndicator,
+  ScrollView,
+  Animated,
 } from 'react-native';
 import { Image, Text, Card } from '@rneui/base';
 import Carousel from 'react-native-reanimated-carousel';
@@ -13,6 +13,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ScalingDot } from 'react-native-animated-pagination-dots';
 import { useAssets } from 'expo-asset';
 import Colors from '@/constants/Colors';
+
+// Define interface for crypto data
+interface CryptoData {
+  name: string;
+  title: string;
+  description: string;
+  currentPrice: string;
+  previousPrice: string;
+  avatar: any; // Adjust the type of avatar as per actual usage
+}
 
 const crypto1 = require('@/assets/images/crypto-article-1.jpeg');
 const crypto2 = require('@/assets/images/crypto-article-2.jpeg');
@@ -22,66 +32,65 @@ const crypto5 = require('@/assets/images/crypto-article-5.jpeg');
 const crypto6 = require('@/assets/images/crypto-article-6.jpeg');
 
 const DashboardLatest = () => {
-const width = Dimensions.get('window').width;
-const [scrollX] = useState(new Animated.Value(0));
-const [searchValue, setSearchValue] = useState('');
+  const width = Dimensions.get('window').width;
+  const [scrollX] = useState(new Animated.Value(0));
+  const [searchValue, setSearchValue] = useState<string>('');
 
-// Importing assets
-const carouselImage = require('@/assets/images/banner.jpg');
+  // Importing assets
+  const carouselImage = require('@/assets/images/banner.jpg');
 
-const crypto = [
-  {
-    name: 'BTC',
-    title: 'Bitcoin Hits New Highs',
-    description: 'Bitcoin reaches a new all-time high.',
-    currentPrice: '$39,500',
-    previousPrice: '$38,200',
-    avatar: crypto1,
-  },
-  {
-    name: 'ETH',
-    title: 'Ethereum 2.0 Launched',
-    description: 'The long-awaited Ethereum 2.0 upgrade is now live.',
-    currentPrice: '$2,600',
-    previousPrice: '$2,450',
-    avatar: crypto2,
-  },
-  {
-    name: 'XRP',
-    title: 'Ripple Partners with Major Bank',
-    description: 'Ripple has announced a new partnership.',
-    currentPrice: '$1.20',
-    previousPrice: '$1.15',
-    avatar: crypto3,
-  },
-  {
-    name: 'LTC',
-    title: 'Litecoin Gains Popularity',
-    description: 'Litecoin is gaining traction as a preferred cryptocurrency for small transactions.',
-    currentPrice: '$180',
-    previousPrice: '$170',
-    avatar: crypto4,
-  },
-  {
-    name: 'ADA',
-    title: 'Cardano Smart Contracts',
-    description: 'Cardano successfully implements smart contracts, opening up new possibilities for developers.',
-    currentPrice: '$1.40',
-    previousPrice: '$1.30',
-    avatar: crypto5,
-  },
-  {
-    name: 'DOT',
-    title: 'Polkadot Expands Network',
-    description: 'Polkadot expands its network with new parachain auctions, increasing its ecosystem’s capabilities.',
-    currentPrice: '$30',
-    previousPrice: '$28',
-    avatar: crypto6,
-  },
-];
-  const keyExtractor = useCallback((item, index) => index.toString(), []);
+  const crypto: CryptoData[] = [
+    {
+      name: 'BTC',
+      title: 'Bitcoin Hits New Highs',
+      description: 'Bitcoin reaches a new all-time high.',
+      currentPrice: '$39,500',
+      previousPrice: '$38,200',
+      avatar: crypto1,
+    },
+    {
+      name: 'ETH',
+      title: 'Ethereum 2.0 Launched',
+      description: 'The long-awaited Ethereum 2.0 upgrade is now live.',
+      currentPrice: '$2,600',
+      previousPrice: '$2,450',
+      avatar: crypto2,
+    },
+    {
+      name: 'XRP',
+      title: 'Ripple Partners with Major Bank',
+      description: 'Ripple has announced a new partnership.',
+      currentPrice: '$1.20',
+      previousPrice: '$1.15',
+      avatar: crypto3,
+    },
+    {
+      name: 'LTC',
+      title: 'Litecoin Gains Popularity',
+      description: 'Litecoin is gaining traction as a preferred cryptocurrency for small transactions.',
+      currentPrice: '$180',
+      previousPrice: '$170',
+      avatar: crypto4,
+    },
+    {
+      name: 'ADA',
+      title: 'Cardano Smart Contracts',
+      description: 'Cardano successfully implements smart contracts, opening up new possibilities for developers.',
+      currentPrice: '$1.40',
+      previousPrice: '$1.30',
+      avatar: crypto5,
+    },
+    {
+      name: 'DOT',
+      title: 'Polkadot Expands Network',
+      description: 'Polkadot expands its network with new parachain auctions, increasing its ecosystem’s capabilities.',
+      currentPrice: '$30',
+      previousPrice: '$28',
+      avatar: crypto6,
+    },
+  ];
 
-  
+  const keyExtractor = useCallback((item: any, index: any) => index.toString(), []);
 
   return (
     <ScrollView>
@@ -133,7 +142,7 @@ const crypto = [
         </View>
         <View style={styles.userContent}>
           <View style={styles.userText}>
-            <Text style={styles.trending}> Trending</Text>
+            <Text> Trending</Text>
             <Text style={styles.showAll}> Show All</Text>
           </View>
           <ScrollView horizontal disableIntervalMomentum={true}>
@@ -153,14 +162,12 @@ const crypto = [
                     />
                   </View> 
                   <View style={styles.description} >
-<Text>{u.description}</Text>
+                    <Text>{c.description}</Text>
                   </View>
                   <View style={styles.userAmount}>
-                  <Text style={styles.name}>{c.name}</Text>
+                    <Text style={styles.name}>{c.name}</Text>
                     <Text style={styles.amount}> {c.currentPrice}</Text>
-                    
                   </View>
-                 
                 </Card>
               ))}
             </View>
@@ -170,7 +177,6 @@ const crypto = [
     </ScrollView>
   );
 };
-
 
 export default DashboardLatest;
 
@@ -217,7 +223,7 @@ const styles = StyleSheet.create({
     color: '#3498db',
     paddingRight: 30,
     fontWeight: 'bold',
-    marginTop:5,
+    marginTop: 5,
   },
   discountAmount: {
     fontSize: 18,
@@ -287,7 +293,6 @@ const styles = StyleSheet.create({
     color: '#999999',
   },
   cardImageStyles: {
-    
     // position: 'relative',
     // top: -15,
     // left: -15,
@@ -301,10 +306,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: 'bold',
     color: '#999999',
-  },
-  trending: {
-    color: '#333333',
-    fontWeight: 'bold',
   },
   showAll: {
     color: '#3498db',

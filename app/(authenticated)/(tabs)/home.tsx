@@ -1,103 +1,312 @@
-import { View, Text, ScrollView, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import Colors from "@/constants/Colors";
-import RoundButton from "@/components/RoundButton";
-import Dropdown from "@/components/Dropdown";
 import { useBalanceStore } from "@/store/balanceStore";
-import { defaultStyles } from "@/constants/Styles";
-import { Ionicons } from "@expo/vector-icons";
-import WidgetList from "@/components/SortableList/WidgetList";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { CartesianChart, Line, useChartPressState } from "victory-native";
+import { Circle, useFont } from "@shopify/react-native-skia";
+import { useState } from "react";
+import { format } from "date-fns";
+import tickerData from "@/app/api/ticker-demo-data";
+import { FontAwesome } from "@expo/vector-icons";
+import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import TopMovers from "@/components/Home/TopMovers";
+import Animated, {
+  SharedValue,
+  useAnimatedProps,
+} from "react-native-reanimated";
+const tabs = [
+  { name: "1H" },
+  { name: "1D" },
+  { name: "1W" },
+  { name: "1M" },
+  { name: "1Y" },
+  { name: "All" },
+];
 
+Animated.addWhitelistedNativeProps({ text: true });
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+
+// Start of component
 const Home = () => {
-  const  { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
+  const [value, setValue] = useState(0);
+  const font = useFont(require("@/assets/fonts/SpaceMono-Regular.ttf"), 12);
+  const { state, isActive } = useChartPressState({ x: 0, y: { price: 0 } });
 
-  const onAddMoney = () => {
-    runTransaction({
-      id: Math.random().toString(),
-      title: 'Added Money',
-      amount: Math.floor(Math.random() * 1000) * (Math.random() > 0.5 ? 1 : -1),
-      date: new Date(),
+  const animatedText = useAnimatedProps(() => {
+    let textValue = "$342.02"; // Default value
+
+    if (isActive) {
+      textValue = `$${state.y.price.value.value.toFixed(2)}`;
+    }
+
+    return {
+      text: textValue,
+      defaultValue: "$342.02",
+    };
   });
+
+  const animatedDateText = useAnimatedProps(() => {
+    let textValue = "";
+    if (isActive) {
+      const date = new Date(state.x.value.value);
+      textValue = date.toLocaleDateString();
+    } else {
+      const today = new Date();
+      textValue = today.toLocaleDateString();
+    }
+
+    return {
+      text: textValue,
+      defaultValue: "",
+    };
+  });
+
+  function ToolTip({
+    x,
+    y,
+  }: {
+    x: SharedValue<number>;
+    y: SharedValue<number>;
+  }) {
+    return <Circle cx={x} cy={y} r={4} color="purple" />;
   }
+
   return (
-    <ScrollView style={{ backgroundColor: Colors.background}}>
+    <ScrollView style={{ backgroundColor: Colors.background }}>
       <View style={styles.account}>
-      <View style={styles.row}> 
-      <Text style={styles.balance}>${balance()} </Text>
-      </View>
-      </View>
-      {/*  TODO: Create overall chart of all accounts */}
+        <View style={styles.column}>
+          <Text style={{ fontSize: 32, fontWeight: "bold", marginLeft: -10 }}>
+            Investing
+            <AnimatedTextInput
+              editable={false}
+              underlineColorAndroid={"transparent"}
+              style={{ fontSize: 18, color: Colors.gray }}
+              animatedProps={animatedDateText}
+            ></AnimatedTextInput>
+          </Text>
 
-
-      {/* ==================== */}
-      <View style={styles.actionRow}>
-        <RoundButton icon={'add'} text={'Deposit'} onPress={onAddMoney}  />
-        <RoundButton icon={'refresh'} text={'Exchange'} onPress={clearTransactions}  />
-        <RoundButton icon={'list'} text={'Details'} onPress={onAddMoney}  />
-        <Dropdown />
-      </View>
-
-      <Text style={defaultStyles.sectionHeader}>Widgets</Text>
-       <WidgetList />
-      <Text style={defaultStyles.sectionHeader}>Transactions</Text>
-      <View style={styles.transactions}>
-       {transactions.reverse().length === 0 && <Text style={{padding: 14, color: Colors.gray}} > No Transactions yet</Text>}
-       {transactions.map((transaction) => (
-         <View key={transaction.id} style={{flexDirection: 'row', alignItems:'center', gap:16}}>
-          <View style={styles.circle}>
-            <Ionicons name={transaction.amount > 0 ? 'add' : 'remove'} size={24} color={transaction.amount > 0 ? '#056517' : '#bf1029'} />
-            
-      </View>
-      <View style={{flex: 1}}>
-              <Text style={{ fontWeight: '500'}}>{transaction.title}</Text>
-              <Text style={{ color: Colors.gray, fontSize: 12}}>{transaction.date.toLocaleString()}</Text>
+          <View style={styles.balanceContainer}>
+            <AnimatedTextInput
+              editable={false}
+              underlineColorAndroid={"transparent"}
+              style={[styles.balance, { marginLeft: -10 }]}
+              animatedProps={animatedText}
+            ></AnimatedTextInput>
           </View>
-          <Text>${transaction.amount}</Text>
-      </View>
 
-        ))}
-           
-      
+          <Text style={styles.today}>
+            <AntDesign name="caretup" size={12} color="green" /> $237.12
+            (12.37%) <Text>Today </Text>{" "}
+          </Text>
+          <Text style={styles.today}>
+            <AntDesign name="caretdown" size={12} color="red" /> $12.37 (-2.37%){" "}
+            <Text>yesterday </Text>{" "}
+          </Text>
+          <AnimatedTextInput
+            editable={false}
+            underlineColorAndroid={"transparent"}
+            style={{
+              fontSize: 18,
+              color: Colors.gray,
+              marginLeft: 285,
+              marginTop: -20,
+            }}
+            animatedProps={animatedDateText}
+          ></AnimatedTextInput>
         </View>
-        
+      </View>
+      {/*  Cartesian Chart to display Users Data */}
+      <View style={{ height: 180, marginRight: 30, marginLeft: -20 }}>
+        <CartesianChart
+          chartPressState={state}
+          data={tickerData!}
+          xKey="timestamp"
+          yKeys={["price"]}
+          axisOptions={{
+            font,
+            tickCount: 5,
+            labelOffset: { x: 10, y: 0 },
+            labelColor: Colors.gray,
+            formatYLabel: () => ``,
+            formatXLabel: (ms) => format(new Date(ms), "MM"),
+          }}
+        >
+          {({ points }) => (
+            <>
+              <Line points={points.price} color={"purple"} strokeWidth={2} />
+              {isActive && (
+                <ToolTip x={state.x.position} y={state.y.price.position} />
+              )}
+            </>
+          )}
+        </CartesianChart>
+      </View>
+      {/* Buttons to change date range of graph  */}
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          {tabs.map((item, index) => {
+            const isActive = index === value;
+            return (
+              <View key={item.name} style={{ flex: 1 }}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setValue(index);
+                  }}
+                >
+                  <View
+                    style={[
+                      styles.item,
+                      isActive && { backgroundColor: "#e0e7ff" },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.text, isActive && { color: "#4338ca" }]}
+                    >
+                      {item.name}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            );
+          })}
+        </View>
+      </SafeAreaView>
+      {/* Current Crypto and Cash in APP */}
+      <TouchableOpacity>
+        <View style={styles.cryptoAvailableContainer}>
+          <View style={[styles.row, { marginLeft: 30 }]}>
+          <MaterialCommunityIcons name="hand-coin-outline" size={24} color="black" />
+            <Text style={{ fontSize: 16, fontWeight: 600 }}>Crypto</Text>
+          </View>
+          <View style={[styles.row, { marginRight: 30 }]}>
+            <Text style={{ fontSize: 16, fontWeight: 600 }}>$224.13</Text>
+            <Feather name="chevron-right" size={24} color="black" />
+          </View>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <View style={styles.cashContainer}>
+          <View style={[styles.row, { marginLeft: 30 }]}>
+          <FontAwesome name="money" size={24} color="black" />
+            <Text style={{ fontSize: 16, fontWeight: 600 }}>Cash</Text>
+          </View>
+          <View style={[styles.row, { marginRight: 30 }]}>
+            <Text style={{ fontSize: 16, fontWeight: 600 }}>$224.13</Text>
+            <Feather name="chevron-right" size={24} color="black" />
+          </View>
+        </View>
+      </TouchableOpacity>
+      <View style={styles.line}></View>
+      {/* TopGainers for Crypto */}
+      <TopMovers />
+      <View style={styles.line}></View>
+      
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    paddingHorizontal: 12,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
+  },
+  item: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
+    backgroundColor: "transparent",
+    borderRadius: 6,
+  },
+  text: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#6b7280",
+  },
   account: {
-    margin:30,
-    alignItems: 'flex-start',
+    margin: 30,
+    alignItems: "flex-start",
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 10,
+  },
+  column: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   balance: {
     fontSize: 45,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
+  balanceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  today: {},
+  yesterday: {},
   actionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     margin: 25,
   },
   transactions: {
     marginHorizontal: 20,
     padding: 14,
-    backgroundColor: '#fff', 
+    backgroundColor: "#fff",
     borderRadius: 16,
-    gap:20,
+    gap: 20,
   },
   circle: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: Colors.lightGray,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cryptoAvailableContainer: {
+    display: "flex",
+    width: "100%",
+    marginTop:40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  cashContainer: {  
+    display: "flex",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginTop:20,
+  },
+  line: {
+    borderBottomColor: Colors.lightGray,
+    borderBottomWidth: 1,
+    marginHorizontal: 20,
+    marginTop: 20,
   }
 });
 export default Home;

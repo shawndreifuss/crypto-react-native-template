@@ -10,8 +10,7 @@ import {
 } from "react-native";
 import React from "react";
 import Colors from "@/constants/Colors";
-import { useBalanceStore } from "@/store/balanceStore";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { CartesianChart, Line, useChartPressState } from "victory-native";
 import { Circle, useFont } from "@shopify/react-native-skia";
 import { useState } from "react";
@@ -25,6 +24,7 @@ import Animated, {
   SharedValue,
   useAnimatedProps,
 } from "react-native-reanimated";
+import NewsFeed from "@/components/Home/NewsFeed";
 const tabs = [
   { name: "1H" },
   { name: "1D" },
@@ -184,6 +184,11 @@ const Home = () => {
       </SafeAreaView>
       {/* Current Crypto and Cash in APP */}
       <TouchableOpacity>
+      <View style={[styles.listHeader, {}]}>
+           <Text style={styles.listTitle}>Buying Power </Text>
+                <Text style={styles.listTitle}>$100.05</Text>
+            </View>
+            <View style={styles.line}></View>
         <View style={styles.cryptoAvailableContainer}>
           <View style={[styles.row, { marginLeft: 30 }]}>
           <MaterialCommunityIcons name="hand-coin-outline" size={24} color="black" />
@@ -210,8 +215,17 @@ const Home = () => {
       <View style={styles.line}></View>
       {/* TopGainers for Crypto */}
       <TopMovers />
+      <View >
+            <View style={styles.listHeader}>
+              <Text style={styles.listTitle}>Crypto News </Text>
+
+              <TouchableOpacity onPress={() => {}}>
+                <Text style={styles.listAction}>View All</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
       <View style={styles.line}></View>
-      
+      <NewsFeed/>
     </ScrollView>
   );
 };
@@ -291,6 +305,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 10,
+  },
+  listHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    marginTop: 20,
+  },
+  listTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    lineHeight: 22,
+    color: '#121a26',
+  },
+  listAction: {
+    fontSize: 14,
+    fontWeight: '500',
+    lineHeight: 20,
+    color: '#778599',
   },
   cashContainer: {  
     display: "flex",

@@ -433,3 +433,84 @@ export  const tickerData = [
   },
 ];
 export default tickerData;
+
+
+
+export const portfolio = {
+  balance :'32761.65',
+  changes :'+20%',
+  type:'I'
+}
+
+export const coins = [
+  {
+    id: 1,
+    currency: 'Bitcoin',
+    symbol: 'BTC',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+    amount: '61,470',
+    changes: '+3.42%',
+    type: 'I', // I = increase, D = Decrease
+    wallet: {
+      value: '4,273.10',
+      crypto: '0.023'
+    }
+  },
+  {
+    id: 2,
+    currency: 'Ethereum',
+    symbol: 'ETH',
+    image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png?v=014',
+    amount: '4,130',
+    changes: '-2.14%',
+    type: 'D', // I = increase, D = Decrease
+    wallet: {
+      value: '8,200.10',
+      crypto: '2'
+    }
+  },
+  {
+    id: 3,
+    currency: 'Binance',
+    symbol: 'BNB',
+    image: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png?v=014',
+    amount: '501',
+    changes: '+10.22%',
+    type: 'I', // I = increase, D = Decrease
+    wallet: {
+      value: '3,256',
+      crypto: '6.3'
+    }
+  },
+  {
+    id: 4,
+    currency: 'Doge',
+    symbol: 'DOGE',
+    image: 'https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=014',
+    amount: '2421',
+    changes: '+23.29%',
+    type: 'I', // I = increase, D = Decrease
+    wallet: {
+      value: '4,273.10',
+      crypto: '1203'
+    }
+  },
+  {
+    id: 5,
+    currency: 'Ripple',
+    symbol: 'XRP',
+    image: 'https://cryptologos.cc/logos/xrp-xrp-logo.png?v=014',
+    amount: '1.23',
+    changes: '-5.29%',
+    type: 'D', // I = increase, D = Decrease
+    wallet: {
+      value: '3,219',
+      crypto: '2800'
+    }
+  },
+];
+
+
+const bnb_price = '450'
+const dummyData = { portfolio,coins,bnb_price}
+export {dummyData}

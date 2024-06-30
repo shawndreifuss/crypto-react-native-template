@@ -11,6 +11,22 @@ import { Fontisto } from '@expo/vector-icons';
 const CustomHeader = () => {
   const { top } = useSafeAreaInsets();
 
+
+  const BellButton = ({ isWhite, style, navigation }) => (
+    <TouchableOpacity
+      style={[styles.button, style]}
+      onPress={() => navigation.navigate('Pro')}
+    >
+      <Icon
+        family="NowExtra"
+        size={16}
+        name="bulb"
+        color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
+      />
+      <Block middle style={[styles.notify, { backgroundColor: nowTheme.COLORS[isWhite ? 'WHITE' : 'PRIMARY'] }]} />
+    </TouchableOpacity>
+  );
+
   return (
     <BlurView intensity={80} tint={'extraLight'} style={{ paddingTop: top }}>
       <View
@@ -26,25 +42,24 @@ const CustomHeader = () => {
         <Link href={'/(authenticated)/(modals)/account'} asChild>
           <TouchableOpacity
             style={{
-              width: 40,
-              height: 40,
+              width: 60,
+              height: 60,
               borderRadius: 20,
-              backgroundColor: Colors.gray,
               justifyContent: 'center',
               alignItems: 'center',
+              marginLeft:-5,
             }}>
-            <Fontisto name="nav-icon-grid" size={24} color="black" />
+            <Fontisto name="nav-icon-grid" size={26} color="black" />
           </TouchableOpacity>
         </Link>
         <View style={styles.searchSection}>
-          <Ionicons style={styles.searchIcon} name="search" size={20} color={Colors.dark} />
-          <TextInput style={styles.input} placeholder="Search" placeholderTextColor={Colors.dark} />
-        </View>
-        <View style={styles.circle}>
-          <Ionicons name={'stats-chart'} size={20} color={Colors.dark} />
-        </View>
+        <Text style={{fontSize: 32, color: Colors.gray}}>Live Market</Text>
+         </View>
         <View style={styles.circle}>
           <Ionicons name={'card'} size={20} color={Colors.dark} />
+        </View>
+        <View style={styles.circle}>
+          <Ionicons name={'settings'} size={20} color={Colors.dark} />
         </View>
       </View>
     </BlurView>
@@ -66,7 +81,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.lightGray,
     borderRadius: 30,
   },
   searchIcon: {

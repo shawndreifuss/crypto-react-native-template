@@ -1,62 +1,85 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
-import { Currency } from '@/interfaces/crypto';
-import { Link } from 'expo-router';
-import { useHeaderHeight } from '@react-navigation/elements';
-import Colors from '@/constants/Colors';
-import { defaultStyles } from '@/constants/Styles';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, FlatList, Image, TextInput } from 'react-native';
+import { dummyData } from '@/app/api/ticker-demo-data';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ProfitIndicator from '@/components/ProfitIndicator';
+import TopMovers from '@/components/Home/TopMovers';
 
-const Page = () => {
-  const headerHeight = useHeaderHeight();
+interface SearchProps {
+  navigation: any; // You can refine this type based on your navigation setup
+}
 
-  const currencies = useQuery({
-    queryKey: ['listings'],
-    queryFn: () => fetch('/api/listings').then((res) => res.json()),
-  });
+interface Coin {
+  id: string;
+  image: any; // Adjust the type based on the image source type
+  currency: string;
+  amount: number;
+  changes: string;
+  type: 'I' | 'D';
+}
 
-  const ids = currencies.data?.map((currency: Currency) => currency.id).join(',');
-
-  const { data } = useQuery({
-    queryKey: ['info', ids],
-    queryFn: () => fetch(`/api/info?ids=${ids}`).then((res) => res.json()),
-    enabled: !!ids,
-  });
-
+const Search: React.FC<SearchProps> = () => {
   return (
-    <ScrollView
-      style={{ backgroundColor: Colors.background }}
-      contentContainerStyle={{ paddingTop: headerHeight }}>
-      <Text style={defaultStyles.sectionHeader}>Latest Crypot</Text>
-      <View style={defaultStyles.block}>
-        {currencies.data?.map((currency: Currency) => (
-          <Link href={`/crypto/${currency.id}`} key={currency.id} asChild>
-            <TouchableOpacity style={{ flexDirection: 'row', gap: 14, alignItems: 'center' }}>
-              <Image source={{ uri: data?.[currency.id].logo }} style={{ width: 40, height: 40 }} />
-              <View style={{ flex: 1, gap: 6 }}>
-                <Text style={{ fontWeight: '600', color: Colors.dark }}>{currency.name}</Text>
-                <Text style={{ color: Colors.gray }}>{currency.symbol}</Text>
-              </View>
-              <View style={{ gap: 6, alignItems: 'flex-end' }}>
-                <Text>{currency.quote.EUR.price.toFixed(2)} €</Text>
-                <View style={{ flexDirection: 'row', gap: 4 }}>
-                  <Ionicons
-                    name={currency.quote.EUR.percent_change_1h > 0 ? 'caret-up' : 'caret-down'}
-                    size={16}
-                    color={currency.quote.EUR.percent_change_1h > 0 ? 'green' : 'red'}
-                  />
-                  <Text
-                    style={{ color: currency.quote.EUR.percent_change_1h > 0 ? 'green' : 'red' }}>
-                    {currency.quote.EUR.percent_change_1h.toFixed(2)} %
-                  </Text>
+    <>
+    <TopMovers/>
+    <View style={{ flex: 2, backgroundColor: '#fff' }}> 
+    
+      <View style={{ flex: 1, flexDirection: 'column' }}>
+    
+
+        {/* search bar */}
+        <View style={{ flex: 0.5, justifyContent: 'flex-start', backgroundColor: '#fff', paddingHorizontal: '2%' , marginTop:-40 }}>
+          <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#999', borderRadius: 5, height: 50, width: '100%', justifyContent: 'flex-start', alignItems: 'center', paddingLeft: 20 }}>
+            <Icon name='search' color='#ddd' size={22} />
+            <TextInput placeholder='Search' placeholderTextColor="#999" style={{ flex: 1 }} />
+          </View>
+        </View>
+
+       
+        {/* vertical scroll section */}
+        <View style={{ flex: 4, backgroundColor: '#fff', paddingHorizontal: '2%' }}>
+          <FlatList
+            keyExtractor={(item) => item.id}
+            data={dummyData?.coins}
+            renderItem={({ item }: { item: Coin }) => (
+              <View style={{ flexDirection: 'row', height: 100, width: '100%', borderWidth: 1, borderColor: '#ddd', borderRadius: 15, justifyContent: 'space-between', paddingRight: 10, marginBottom: 15 }}>
+                {/* Coin image, coin name and symbol */}
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {/* Coin image */}
+                  <Image 
+  style={{ height: 40, width: 40, marginLeft:20 }} 
+  resizeMode="contain"
+  source={{ uri: item.image }} 
+/>
+                  {/* Coin symbol */}
+                  <View style={{ flexDirection: 'column', justifyContent: 'flex-start' }}>
+                    <Text style={{ fontFamily: 'Roboto-Medium', color: '#333', fontSize: 20, marginLeft:20 }}>{item.currency}</Text>
+                    <Text style={{marginLeft:20 }}>BNB/USDT</Text>
+                  </View>
+                </View>
+
+                {/* Coin price and indicator */}
+                <View style={{ flexDirection: 'column', backgroundColor: '#fff', alignContent: 'center', justifyContent: 'center' }}>
+                  {/* price */}
+                  <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 24, color: '#333' }}>${item.amount}</Text>
+
+                  {/* indicator */}
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: item.type === 'I' ? 'green' : 'red', fontFamily: 'Roboto-Bold', fontSize: 18 }}>{item.changes}</Text>
+                    <Icon name={item.type === 'I' ? 'chevron-circle-up' : 'chevron-circle-down'} color={item.type === 'I' ? 'green' : 'red'} />
+                  </View>
                 </View>
               </View>
-            </TouchableOpacity>
-          </Link>
-        ))}
+            )}
+          />
+        </View>
       </View>
-    </ScrollView>
+    </View>
+    </>
   );
 };
-export default Page;
+
+export default Search;
+
+const styles = StyleSheet.create({});

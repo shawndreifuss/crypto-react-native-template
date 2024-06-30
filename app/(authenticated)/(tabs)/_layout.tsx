@@ -7,6 +7,7 @@ import { BlurView } from 'expo-blur'
 import Header from '@/components/Header'
 import { Image } from 'react-native'
 import { Entypo } from '@expo/vector-icons';
+import CustomHeader from '@/components/CustomHeader'
 
 const Layout = () => {
   return (
@@ -43,7 +44,7 @@ const Layout = () => {
         tabBarIcon: ({size,color}) => (
           <FontAwesome name='bitcoin' size={size} color={color} />
         ),
-        header: () => <Header />
+        header: () => <CustomHeader />
       }} />
        {/* Invest Tab */}
        <Tabs.Screen name='ai-investor' options={{

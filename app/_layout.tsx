@@ -70,7 +70,7 @@ const InitialLayout = () => {
     if (isSignedIn && !inAuthGroup) {
       router.replace('/(authenticated)/(tabs)/home');
     } else if (!isSignedIn) {
-      router.replace('/');
+      router.replace('/(authenticated)/(tabs)/home');
     }
   }, [isSignedIn]);
 

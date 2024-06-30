@@ -51,7 +51,54 @@ const articles = [
     date: 'Jun 23, 2024',
     image: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Cardano_Logo.jpg',
   },
-  
+  {
+    id: '7',
+    category: 'Cryptocurrency',
+    title: 'Polkadot: Interoperability and Beyond',
+    author: 'Grace Black',
+    date: 'Jun 22, 2024',
+    image: 'https://images.pexels.com/photos/8441242/pexels-photo-8441242.jpeg',
+  },
+  {
+    id: '8',
+    category: 'Cryptocurrency',
+    title: 'Chainlink: Bridging the Gap Between Smart Contracts and Real World Data',
+    author: 'Henry Young',
+    date: 'Jun 21, 2024',
+    image: 'https://cryptopotato.com/wp-content/uploads/2020/01/bitcoin_news-min.jpg',
+  },
+  {
+    id: '9',
+    category: 'Cryptocurrency',
+    title: 'Stellar Lumens: Making Money More Fluid',
+    author: 'Isabel Clark',
+    date: 'Jun 20, 2024',
+    image: 'https://smartasset.com/wp-content/uploads/sites/2/2021/03/chainlink_1.png',
+  },
+  {
+    id: '10',
+    category: 'Cryptocurrency',
+    title: 'Tether: The Stablecoin Controversy',
+    author: 'Jack Walker',
+    date: 'Jun 19, 2024',
+    image: 'https://cryptoticker.io/en/wp-content/uploads/sites/2/2018/12/crypto.jpg',
+  },
+  {
+    id: '11',
+    category: 'Cryptocurrency',
+    title: 'Solana: High-Speed Blockchain Solutions',
+    author: 'Karen Mitchell',
+    date: 'Jun 18, 2024',
+    image: 'https://www.forexcrunch.com/wp-content/uploads/2020/12/Crypto-currencies.jpg',
+  },
+  {
+    id: '12',
+    category: 'Cryptocurrency',
+    title: 'Monero: Privacy-Focused Cryptocurrency',
+    author: 'Liam Scott',
+    date: 'Jun 17, 2024',
+    image: 'https://cryptotrends.tech/wp-content/uploads/2020/04/cryptocurrency.jpg',
+  },
 ];
 
 interface Article {

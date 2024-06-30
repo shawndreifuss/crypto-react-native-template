@@ -4,8 +4,9 @@ import { Tabs } from 'expo-router'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { BlurView } from 'expo-blur'
-import CustomHeader from '@/components/CustomHeader'
 import Header from '@/components/Header'
+import { Image } from 'react-native'
+import { Entypo } from '@expo/vector-icons';
 
 const Layout = () => {
   return (
@@ -36,13 +37,21 @@ const Layout = () => {
         ),
         header: () => <Header />
       }} />
-      {/* Invest Tab */}
-       <Tabs.Screen name='invest' options={{
-        title: 'Invest',
+      {/*  Crypto Tab */}
+      <Tabs.Screen name='crypto' options={{
+        title: 'Crypto',
         tabBarIcon: ({size,color}) => (
-          <FontAwesome name='line-chart' size={size} color={color} />
+          <FontAwesome name='bitcoin' size={size} color={color} />
         ),
-        header: () => <CustomHeader />
+        header: () => <Header />
+      }} />
+       {/* Invest Tab */}
+       <Tabs.Screen name='ai-investor' options={{
+        title: '',
+        tabBarIcon: ({size,color}) => (
+          <Image source={require('@/assets/images/ai-logo.jpeg')} style={{width:70, height:70, borderRadius:5}} />
+        ),
+        header: () => <Header />
       }} />
       {/* Transfers Tab */}
       <Tabs.Screen name='transfer' options={{
@@ -50,23 +59,15 @@ const Layout = () => {
         tabBarIcon: ({size,color}) => (
           <FontAwesome name='exchange' size={size} color={color} />
         ),
-        header: () => <CustomHeader />
+        header: () => <Header />
       }} />
-      {/*  Crypto Tab */}
-      <Tabs.Screen name='crypto' options={{
-        title: 'Crypto',
+      {/* my wallet Tab */}
+      <Tabs.Screen name='my-wallet' options={{
+        title: 'My Wallet',
         tabBarIcon: ({size,color}) => (
-          <FontAwesome name='bitcoin' size={size} color={color} />
+          <Entypo name='wallet' size={size} color={color} />
         ),
-        header: () => <CustomHeader />
-      }} />
-      {/* Lifestyle Tab */}
-      <Tabs.Screen name='lifestyle' options={{
-        title: 'Lifestyle',
-        tabBarIcon: ({size,color}) => (
-          <FontAwesome name='th' size={size} color={color} />
-        ),
-        header: () => <CustomHeader />
+        header: () => <Header />
       }} />
     </Tabs>
   )

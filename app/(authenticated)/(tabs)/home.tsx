@@ -83,6 +83,7 @@ const Home = () => {
   }
 
   return (
+    <>
     <ScrollView style={{ backgroundColor: Colors.background }}>
       <View style={styles.account}>
         <View style={styles.column}>
@@ -224,9 +225,12 @@ const Home = () => {
               </TouchableOpacity>
             </View>
           </View>
-      <View style={styles.line}></View>
+      
+   
       <NewsFeed/>
-    </ScrollView>
+      </ScrollView>
+      <View style={styles.line}></View>
+    </>
   );
 };
 

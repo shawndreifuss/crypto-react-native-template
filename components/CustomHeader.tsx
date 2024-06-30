@@ -6,6 +6,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Link } from 'expo-router';
+import { Fontisto } from '@expo/vector-icons';
 
 const CustomHeader = () => {
   const { top } = useSafeAreaInsets();
@@ -32,7 +33,7 @@ const CustomHeader = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{ color: '#fff', fontWeight: '500', fontSize: 16 }}>SG</Text>
+            <Fontisto name="nav-icon-grid" size={24} color="black" />
           </TouchableOpacity>
         </Link>
         <View style={styles.searchSection}>

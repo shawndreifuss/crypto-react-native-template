@@ -12,7 +12,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import { Currency } from './types';
+import { Currency } from './Home/types';
 
 const CARD_WIDTH = Math.min(Dimensions.get('screen').width * 0.75, 150);
 

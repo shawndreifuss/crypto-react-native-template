@@ -19,7 +19,7 @@ import tickerData from "@/app/api/ticker-demo-data";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import TopMovers from "@/components/Home/TopMovers";
+import TopMovers from "@/components/TopMovers";
 import Animated, {
   SharedValue,
   useAnimatedProps,
@@ -41,7 +41,10 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 const Home = () => {
   const [value, setValue] = useState(0);
   const font = useFont(require("@/assets/fonts/SpaceMono-Regular.ttf"), 12);
-  const { state, isActive } = useChartPressState({ x: 0, y: { price: 0 } });
+  const { state, isActive } = useChartPressState<{ x: string; y: { price: number; } }>({
+    x: '',
+    y: { price: 0 }
+  });
 
   const animatedText = useAnimatedProps(() => {
     let textValue = "$342.02"; // Default value
@@ -59,7 +62,7 @@ const Home = () => {
   const animatedDateText = useAnimatedProps(() => {
     let textValue = "";
     if (isActive) {
-      const date = new Date(state.x.value.value);
+      const date = new Date(parseInt(state.x.value.value, 10)); // Convert string to number for Date
       textValue = date.toLocaleDateString();
     } else {
       const today = new Date();

@@ -12,20 +12,6 @@ const CustomHeader = () => {
   const { top } = useSafeAreaInsets();
 
 
-  const BellButton = ({ isWhite, style, navigation }) => (
-    <TouchableOpacity
-      style={[styles.button, style]}
-      onPress={() => navigation.navigate('Pro')}
-    >
-      <Icon
-        family="NowExtra"
-        size={16}
-        name="bulb"
-        color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-      />
-      <Block middle style={[styles.notify, { backgroundColor: nowTheme.COLORS[isWhite ? 'WHITE' : 'PRIMARY'] }]} />
-    </TouchableOpacity>
-  );
 
   return (
     <BlurView intensity={80} tint={'extraLight'} style={{ paddingTop: top }}>

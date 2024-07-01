@@ -1,23 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, FlatList, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TextInput } from 'react-native';
 import { dummyData } from '@/app/api/ticker-demo-data';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ProfitIndicator from '@/components/ProfitIndicator';
 import TopMovers from '@/components/TopMovers';
-
-interface SearchProps {
-  navigation: any; // You can refine this type based on your navigation setup
-}
-
-interface Coin {
-  id: number; // Adjusted to number
-  image: string; // Adjusted the type to string for the URI
-  currency: string;
-  amount: string; // Adjusted to string
-  changes: string;
-  type: 'I' | 'D';
-}
+import { SearchProps } from '@/interfaces/crypto';
+import { Coin } from '@/types/types';
 
 const Search: React.FC<SearchProps> = () => {
   return (

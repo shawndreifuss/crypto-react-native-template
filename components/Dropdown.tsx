@@ -9,7 +9,15 @@ const Dropdown = () => {
         <RoundButton icon={'ellipsis-horizontal'} text={'More'} />
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content>
+      <DropdownMenu.Content
+       loop={true}
+       side="bottom"
+       align="end"
+       alignOffset={10}
+       avoidCollisions
+       collisionPadding={20}
+       sideOffset={10}
+      >
         <DropdownMenu.Item key="statement">
           <DropdownMenu.ItemTitle>Statement</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemIcon

@@ -4,7 +4,6 @@ import {
   Dimensions,
   SafeAreaView,
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
   Image,
@@ -12,7 +11,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import { Currency } from './Home/types';
+import { Currency } from '@/interfaces/crypto';
+import { FlatList } from 'react-native-gesture-handler';
 
 const CARD_WIDTH = Math.min(Dimensions.get('screen').width * 0.75, 150);
 
@@ -35,79 +35,67 @@ export default function TopMovers() {
     enabled: !!ids,
   });
 
+  // Render item function for FlatList
+  const renderItem = ({ item }: { item: Currency }) => (
+    <TouchableOpacity onPress={() => {}}>
+      <View style={styles.card}>
+        <View style={styles.cardTop}>
+          <View style={styles.cardIcon}>
+            <Image
+              source={{ uri: currencyInfo?.[item.id]?.logo }}
+              style={{ width: 40, height: 40 }}
+            />
+          </View>
+
+          <View style={styles.cardBody}>
+            <Text style={styles.cardTitle}>{item.symbol}</Text>
+          </View>
+        </View>
+
+        <View style={styles.cardFooter}>
+          <Text style={styles.cardTitle}>{item.name}</Text>
+          <Text style={styles.cardPrice}>
+            ${formatPriceWithCommas(item.quote.EUR.price)}
+          </Text>
+          <View style={{ flexDirection: 'row', gap: 4, marginLeft: -6, paddingTop: 6 }}>
+            <Ionicons
+              name={item.quote.EUR.percent_change_1h > 0 ? 'caret-up' : 'caret-down'}
+              size={16}
+              color={item.quote.EUR.percent_change_1h > 0 ? 'green' : 'red'}
+            />
+            <Text
+              style={{
+                color: item.quote.EUR.percent_change_1h > 0 ? 'green' : 'red',
+              }}
+            >
+              {item.quote.EUR.percent_change_1h.toFixed(2)} %
+            </Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.list}>
-            <View style={styles.listHeader}>
-              <Text style={styles.listTitle}>Top Movers </Text>
+        <View style={styles.list}>
+          <View style={styles.listHeader}>
+            <Text style={styles.listTitle}>Top Movers </Text>
 
-              <TouchableOpacity onPress={() => {}}>
-                <Text style={styles.listAction}>View All</Text>
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView
-              contentContainerStyle={styles.listContent}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              {currencies?.map((currency: Currency) => (
-                 <Link href={`/crypto/${currency.id}`} key={currency.id} asChild>
-                <TouchableOpacity  onPress={() => {}}>
-                  <View style={styles.card}>
-                    <View style={styles.cardTop}>
-                      <View style={styles.cardIcon}>
-                        <Image
-                          source={{ uri: currencyInfo?.[currency.id]?.logo }}
-                          style={{ width: 40, height: 40 }}
-                        />
-                      </View>
-
-                      <View style={styles.cardBody}>
-                        <Text style={styles.cardTitle}>{currency.symbol}</Text>
-                      </View>
-                    </View>
-
-                    <View style={styles.cardFooter}>
-                      <Text style={styles.cardTitle}>{currency.name}</Text>
-                      <Text style={styles.cardPrice}>
-                        ${formatPriceWithCommas(currency.quote.EUR.price)}
-                      </Text>
-                      <View style={{ flexDirection: 'row', gap: 4, marginLeft:-6, paddingTop: 6 }}>
-                        <Ionicons
-                          name={
-                            currency.quote.EUR.percent_change_1h > 0
-                              ? 'caret-up'
-                              : 'caret-down'
-                          }
-                          size={16}
-                          color={
-                            currency.quote.EUR.percent_change_1h > 0
-                              ? 'green'
-                              : 'red'
-                          }
-                        />
-                        <Text
-                          style={{
-                            color:
-                              currency.quote.EUR.percent_change_1h > 0
-                                ? 'green'
-                                : 'red',
-                          }}
-                        >
-                          {currency.quote.EUR.percent_change_1h.toFixed(2)} %
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                </Link>
-              ))}
-            </ScrollView>
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={styles.listAction}>View All</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
+
+          <FlatList
+            data={currencies}
+            contentContainerStyle={styles.listContent}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -190,7 +178,7 @@ const styles = StyleSheet.create({
     color: '#121a26',
     marginTop: 4,
   },
-  cardFooter: {
+ cardFooter: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'space-between',

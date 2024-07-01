@@ -46,3 +46,8 @@ export interface Ticker {
   volume_24h: number;
   market_cap: number;
 }
+
+
+export interface SearchProps {
+  navigation: any; // You can refine this type based on your navigation setup
+}

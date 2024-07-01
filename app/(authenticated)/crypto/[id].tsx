@@ -43,12 +43,15 @@ const Page = () => {
   }, [isActive]);
 
   const { data } = useQuery({
-    queryKey: ['info', id],
+    queryKey: ['info', id || 'default'], // Provide a default value if id is undefined
     queryFn: async () => {
+      if (!id) return null; // Handle case where id is undefined
+  
       const info = await fetch(`/api/info?ids=${id}`).then((res) => res.json());
       return info[+id];
     },
   });
+  
 
   const { data: tickers } = useQuery({
     queryKey: ['tickers'],

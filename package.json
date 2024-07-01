@@ -49,6 +49,7 @@
     "react-native": "0.74.2",
     "react-native-animated-pagination-dots": "^0.1.73",
     "react-native-confirmation-code-field": "^7.4.0",
+    "react-native-draggable-flatlist": "^4.0.1",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-ios-context-menu": "^2.5.1",
     "react-native-ios-utilities": "^4.4.5",

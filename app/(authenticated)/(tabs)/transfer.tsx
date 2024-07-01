@@ -1,12 +1,11 @@
 import React from 'react';
 import Dropdown from '@/components/Dropdown';
 import RoundButton from '@/components/RoundButton';
-import WidgetList from '@/components/SortableList/WidgetList';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { useBalanceStore } from '@/store/balanceStore';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, ScrollView, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
 const Page = () => {
@@ -76,8 +75,6 @@ const Page = () => {
           </View>
         ))}
       </View>
-      <Text style={defaultStyles.sectionHeader}>Widgets</Text>
-      <WidgetList />
     </ScrollView>
   );
 };

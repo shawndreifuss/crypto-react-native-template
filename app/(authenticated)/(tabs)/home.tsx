@@ -24,7 +24,7 @@ import Animated, {
   SharedValue,
   useAnimatedProps,
 } from "react-native-reanimated";
-import NewsFeed from "@/components/Home/NewsFeed";
+import NewsFeed from "@/components/NewsFeed";
 const tabs = [
   { name: "1H" },
   { name: "1D" },
@@ -349,4 +349,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   }
 });
-export default Home;
+export default Home;   

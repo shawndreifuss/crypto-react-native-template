@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native'
 import React from 'react'
 import { Tabs } from 'expo-router'
 import { FontAwesome } from '@expo/vector-icons'
@@ -49,7 +48,7 @@ const Layout = () => {
        {/* Invest Tab */}
        <Tabs.Screen name='ai-investor' options={{
         title: '',
-        tabBarIcon: ({size,color}) => (
+        tabBarIcon: () => (
           <Image source={require('@/assets/images/ai-logo.jpeg')} style={{width:70, height:70, borderRadius:5}} />
         ),
         header: () => <Header />

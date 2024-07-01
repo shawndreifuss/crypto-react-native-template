@@ -1,5 +1,4 @@
 import React from "react";
-import Colors from "@/constants/Colors";
 import { defaultStyles } from "@/constants/Styles";
 import { useAssets } from "expo-asset";
 import { ResizeMode, Video } from "expo-av";
